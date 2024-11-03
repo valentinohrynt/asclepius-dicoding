@@ -15,13 +15,13 @@ class NewsRepository private constructor(
 
         try {
             val localData = newsDao.getAllNews()
+            val response = apiService.getNews("cancer", "health")
+            val news = response.articles
 
-            if (localData.isNotEmpty()) {
+            if (localData.isNotEmpty() && localData.size == news.size && localData == news) {
                 emit(Result.Success(localData))
             } else {
                 try {
-                    val response = apiService.getNews("cancer", "health")
-                    val news = response.articles
                     val newsList = news.map {
                         articlesItem ->
                         val id = news.indexOf(articlesItem) + 1

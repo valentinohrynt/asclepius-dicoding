@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.dicoding.asclepius.view.history
 
 import android.os.Bundle

@@ -7,6 +7,7 @@ import com.dicoding.asclepius.data.HistoryRepository
 import com.dicoding.asclepius.data.NewsRepository
 import com.dicoding.asclepius.di.Injection
 
+@Suppress("UNCHECKED_CAST")
 class ViewModelFactory(
     private val historyRepository: HistoryRepository,
     private val newsRepository: NewsRepository
