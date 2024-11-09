@@ -10,5 +10,7 @@
     <string name="history">History</string>
     <string name="news">News</string>
     <string name="latest_history">Your latest history</string>
+    <string name="crop_cancelled">Crop cancelled</string>
+    <string name="no_media_selected">No media selected</string>
 
 </resources>

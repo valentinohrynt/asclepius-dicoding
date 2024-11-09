@@ -1,7 +1,7 @@
 package com.dicoding.asclepius.view
 
 import android.Manifest
-import android.app.Activity
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
@@ -194,19 +194,23 @@ class MainActivity : AppCompatActivity() {
                 .start(this)
         } else {
             Log.d("Image Picker", "No media selected")
+            showToast(this, getString(R.string.no_media_selected))
         }
     }
 
     @Deprecated("This method has been deprecated in favor of using the Activity Result API\n      which brings increased type safety via an {@link ActivityResultContract} and the prebuilt\n      contracts for common intents available in\n      {@link androidx.activity.result.contract.ActivityResultContracts}, provides hooks for\n      testing, and allow receiving results in separate, testable classes independent from your\n      activity. Use\n      {@link #registerForActivityResult(ActivityResultContract, ActivityResultCallback)}\n      with the appropriate {@link ActivityResultContract} and handling the result in the\n      {@link ActivityResultCallback#onActivityResult(Object) callback}.")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
             val resultUri: Uri? = UCrop.getOutput(data!!)
             currentImageUri = resultUri
             showImage()
         } else if (resultCode == UCrop.RESULT_ERROR) {
             val cropError: Throwable? = UCrop.getError(data!!)
-            Log.e("Crop Error", "onActivityResult: ", cropError)
+            showToast(this, cropError?.message.toString())
+        } else if (resultCode == RESULT_CANCELED) {
+            clearCurrentImage()
+            showToast(this, getString(R.string.crop_cancelled))
         }
     }
 
@@ -252,7 +256,13 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-    
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    fun clearCurrentImage(){
+        currentImageUri = null
+        binding.previewImageView.setImageDrawable(getDrawable(R.drawable.ic_place_holder))
+    }
+
     override fun onResume() {
         super.onResume()
         observeHistory()
